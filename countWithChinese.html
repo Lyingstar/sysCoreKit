@@ -1,0 +1,742 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>countW/Chinese | sysCoreKit</title>
+    <meta name="description" content="countW/Chinese — real-time bilingual word and character counting for Google Docs™." />
+
+    <style>
+        :root {
+            --bg: #0b1116;
+            --text: rgba(233,238,242,.92);
+            --muted: rgba(233,238,242,.72);
+            --muted2: rgba(233,238,242,.55);
+            --border: rgba(255,255,255,.12);
+            --panel: rgba(255,255,255,.06);
+            --panel2: rgba(255,255,255,.08);
+            --shadow: 0 20px 60px rgba(0,0,0,.45);
+            --radius: 18px;
+            --maxw: 1120px;
+            --accent: #8fc6ff;
+            --nav-h: 66px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* ---------- Layout: Topbar + Search ---------- */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-h);
+            display: flex;
+            align-items: center;
+            z-index: 50;
+            background: linear-gradient(to bottom, rgba(6,9,12,.78), rgba(6,9,12,.25));
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+
+        .topbar__inner {
+            width: min(var(--maxw), calc(100% - 40px));
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            letter-spacing: .2px;
+            white-space: nowrap;
+        }
+
+        .brand__mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,.18);
+            background: radial-gradient(10px 10px at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,0) 60%), linear-gradient(135deg, rgba(130,190,255,.30), rgba(110,255,215,.18));
+            box-shadow: 0 10px 30px rgba(0,0,0,.35);
+        }
+
+        .top-search {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-search-field {
+            width: 0;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: width .25s ease;
+            will-change: width;
+        }
+
+        .top-search.open .top-search-field {
+            width: min(480px, calc(100vw - 220px));
+        }
+
+        .top-search-input {
+            height: 40px;
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,.14);
+            background: rgba(255,255,255,.06);
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+        }
+
+            .top-search-input::placeholder {
+                color: rgba(233,238,242,.55);
+            }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,.14);
+            background: rgba(255,255,255,.06);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background .2s ease, transform .05s ease;
+            color: rgba(233,238,242,.92);
+        }
+
+            .icon-btn:hover {
+                background: rgba(255,255,255,.10);
+            }
+
+            .icon-btn:active {
+                transform: translateY(1px);
+            }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            display: block;
+        }
+
+        .top-search-results {
+            position: fixed;
+            top: var(--nav-h);
+            left: 0;
+            right: 0;
+            display: none;
+            z-index: 40;
+        }
+
+            .top-search-results.open {
+                display: block;
+            }
+
+        .top-search-results-inner {
+            width: min(var(--maxw), calc(100% - 40px));
+            margin: 10px auto 0;
+            background: rgba(14,20,26,.95);
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,.12);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .top-search-item {
+            display: block;
+            padding: 12px 14px;
+            border-top: 1px solid rgba(255,255,255,.08);
+            text-decoration: none;
+        }
+
+            .top-search-item:first-child {
+                border-top: none;
+            }
+
+            .top-search-item:hover {
+                background: rgba(255,255,255,.08);
+            }
+
+            .top-search-item .t {
+                font-weight: 600;
+                margin-bottom: 4px;
+                color: rgba(233,238,242,.92);
+            }
+
+            .top-search-item .s {
+                font-size: 13px;
+                color: rgba(233,238,242,.7);
+                line-height: 1.55;
+            }
+
+        @media (max-width:520px) {
+            .top-search.open .top-search-field {
+                width: calc(100vw - 170px);
+            }
+        }
+
+        /* ---------- Page: Hero banner ---------- */
+        .hero {
+            position: relative;
+            padding-top: var(--nav-h);
+            min-height: 56vh;
+            overflow: hidden;
+        }
+
+            .hero::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(1200px 700px at 55% 15%, rgba(120,180,255,.18), rgba(0,0,0,0) 62%), linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.78));
+                z-index: 0;
+            }
+
+        .hero__banner {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-image: url("assets/images/countWithChinese_banner.jpg");
+            background-size: cover;
+            background-position: center;
+            filter: saturate(1.05) contrast(1.05);
+            transform: scale(1.02);
+        }
+
+        .hero__inner {
+            position: relative;
+            z-index: 2;
+            width: min(var(--maxw), calc(100% - 40px));
+            margin: 0 auto;
+            padding: 70px 0 64px;
+            text-align: center;
+            display: grid;
+            place-items: center;
+        }
+
+            .hero__inner > div {
+                padding: 28px 32px;
+                border-radius: 22px;
+                background: rgba(11,17,22,.45);
+                backdrop-filter: blur(14px);
+                -webkit-backdrop-filter: blur(14px);
+                border: 1px solid rgba(255,255,255,.14);
+                box-shadow: 0 18px 50px rgba(0,0,0,.45);
+                max-width: 880px;
+            }
+
+        .hero h1 {
+            margin: 0;
+            font-weight: 350;
+            letter-spacing: .5px;
+            font-size: clamp(36px, 5vw, 68px);
+            line-height: 1.05;
+            text-shadow: 0 12px 40px rgba(0,0,0,.45);
+            color: var(--accent);
+        }
+
+        .hero .sub {
+            margin: 14px auto 0;
+            max-width: 860px;
+            font-size: clamp(15px, 1.8vw, 20px);
+            line-height: 1.65;
+            color: var(--muted);
+            text-shadow: 0 10px 30px rgba(0,0,0,.45);
+        }
+
+        .hero .meta {
+            margin-top: 12px;
+            font-size: 13px;
+            color: rgba(233,238,242,.62);
+        }
+
+        .hero .actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,.16);
+            background: rgba(255,255,255,.07);
+            color: rgba(233,238,242,.92);
+            text-decoration: none;
+            font-size: 14px;
+            transition: background .2s ease, transform .05s ease;
+            min-width: 150px;
+        }
+
+            .btn:hover {
+                background: rgba(255,255,255,.10);
+            }
+
+            .btn:active {
+                transform: translateY(1px);
+            }
+
+            .btn.primary {
+                border-color: rgba(143,198,255,.45);
+                background: rgba(143,198,255,.10);
+            }
+
+        /* ---------- Content ---------- */
+        main {
+            width: min(var(--maxw), calc(100% - 40px));
+            margin: 24px auto 80px;
+            position: relative;
+            z-index: 3;
+            display: grid;
+            gap: 16px;
+        }
+
+
+        .panel {
+            border-radius: 22px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            box-shadow: 0 10px 40px rgba(0,0,0,.18);
+            overflow: hidden;
+        }
+
+        .panel__inner {
+            padding: 22px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 16px;
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            font-weight: 650;
+            letter-spacing: .2px;
+        }
+
+        p {
+            margin: 0 0 12px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        ul, ol {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        li {
+            margin: 6px 0;
+        }
+
+        .kvs {
+            display: grid;
+            gap: 10px;
+        }
+
+        .kv {
+            padding: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,.10);
+            background: rgba(255,255,255,.06);
+        }
+
+            .kv .k {
+                font-size: 12px;
+                color: var(--muted2);
+                margin-bottom: 4px;
+            }
+
+            .kv .v {
+                font-size: 14px;
+                color: rgba(233,238,242,.88);
+                line-height: 1.55;
+            }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,.14);
+            background: rgba(255,255,255,.06);
+            color: rgba(233,238,242,.80);
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(200,200,200,.8);
+            box-shadow: 0 0 0 3px rgba(200,200,200,.12);
+        }
+
+        /* ---------- Footer ---------- */
+        .site-footer {
+            margin-top: 80px;
+            padding: 48px 0 56px;
+            border-top: 1px solid rgba(255,255,255,.10);
+            background: linear-gradient(to bottom, rgba(6,9,12,.6), rgba(6,9,12,.9));
+        }
+
+        .footer-inner {
+            width: min(var(--maxw), calc(100% - 40px));
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+            .footer-links a {
+                color: rgba(233,238,242,.75);
+                text-decoration: none;
+                font-size: 14px;
+            }
+
+                .footer-links a:hover {
+                    color: rgba(233,238,242,1);
+                    text-decoration: underline;
+                }
+
+        .footer-copy {
+            font-size: 13px;
+            color: rgba(233,238,242,.55);
+        }
+
+        @media (max-width:980px) {
+            main {
+                margin-top: -36px;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .hero__inner {
+                padding: 60px 0 56px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Topbar (layout) -->
+    <header class="topbar">
+        <div class="topbar__inner">
+            <a class="brand" href="index.html" aria-label="sysCoreKit home">
+                <span class="brand__mark" aria-hidden="true"></span>
+                <span>sysCoreKit</span>
+            </a>
+
+            <div class="top-search" id="topSearch">
+                <button class="icon-btn" id="searchOpen" type="button" aria-label="Search">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"></path>
+                    </svg>
+                </button>
+
+                <div class="top-search-field" aria-hidden="true">
+                    <input id="searchInput"
+                           class="top-search-input"
+                           type="search"
+                           placeholder="Search sysCoreKit"
+                           autocomplete="off" />
+                    <button class="icon-btn" id="searchClose" type="button" aria-label="Close search">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.29 19.71 2.88 18.3 9.17 12 2.88 5.71 4.29 4.29l6.3 6.3 6.29-6.3z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search results (layout) -->
+    <div class="top-search-results" id="searchResults" aria-label="Search results"></div>
+
+    <!-- Page content -->
+    <section class="hero" aria-label="countW/Chinese banner">
+        <div class="hero__banner" aria-hidden="true"></div>
+        <div class="hero__inner">
+            <div>
+                <h1>countW/Chinese</h1>
+                <p class="sub">
+                    Real-time bilingual counting for Google Docs™. Designed to provide consistent word and character counts
+                    for mixed Chinese and English writing, with lightweight, privacy-respecting behavior.
+                </p>
+                <div class="meta">Under Google's review. Current version: 2.0</div>
+
+                <div class="actions">
+                    <a class="btn primary"
+                       href="https://workspace.google.com/u/0/marketplace"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       aria-label="Open Marketplace listing">
+                        Get in Marketplace
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <section class="panel">
+            <div class="panel__inner grid-2">
+                <div>
+                    <div class="badge"><span class="dot" aria-hidden="true"></span> Summary</div>
+                    <h2>What it does</h2>
+                    <p>
+                        countW/Chinese provides real-time counts while you write in Google Docs™. It focuses on mixed-language documents
+                        where default counters may not match the counting rules you want for Chinese (CJK) characters and English words.
+                    </p>
+
+                    <h2>Highlights</h2>
+                    <ol>
+                        <li>Real-time counting in a lightweight sidebar</li>
+                        <li>Consistent mixed CJK + English counting behavior</li>
+                        <li>Selection-aware counts when you highlight text</li>
+                        <li>Designed for privacy-respecting use</li>
+                    </ol>
+                </div>
+
+                <div class="kvs">
+                    <div class="kv">
+                        <div class="k">Platform</div>
+                        <div class="v">Google Docs™ (Google Workspace Add-on)</div>
+                    </div>
+                    <div class="kv">
+                        <div class="k">Status</div>
+                        <div class="v">Under Google's review</div>
+                    </div>
+                    <div class="kv">
+                        <div class="k">Current version</div>
+                        <div class="v">2.0</div>
+                    </div>
+                    <div class="kv">
+                        <div class="k">Support</div>
+                        <div class="v">syscorekit@gmail.com</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel__inner grid-2">
+                <div>
+                    <h2>How it works</h2>
+                    <p>
+                        The add-on reads the content of the currently open Google Document (and selected text when applicable)
+                        and computes counts based on consistent parsing rules. The results are displayed in the sidebar and updated
+                        as you work.
+                    </p>
+
+                    <h2>Typical use cases</h2>
+                    <ul>
+                        <li>Tracking writing progress in bilingual notes, reports, or coursework</li>
+                        <li>Counting mixed Chinese and English content with predictable results</li>
+                        <li>Quickly checking a section by highlighting it</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h2>Counting rules</h2>
+                    <ul>
+                        <li>Any punctuation does not count.</li>
+                        <li>Each CJK character in the Unicode range <code>\u4e00-\u9fff</code> counts as 1.</li>
+                        <li>English words matching <code>[A-Za-z]+(?:\'[A-Za-z]+)?</code> count as 1.</li>
+                        <li>Any numeric number counts as 1 (still counts as 1 if it has its unit without a space).</li>
+                        <li>Dates separated with <code>/</code> will count separately.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel__inner">
+                <h2>FAQ</h2>
+                <ul>
+                    <li><strong>Why do my counts differ from Google Docs™?</strong> Different counting rules can produce different totals, especially for CJK text and mixed punctuation.</li>
+                    <li><strong>Does it upload my document content?</strong> No. The add-on is intended to process only within the active document environment.</li>
+                    <li><strong>Where can I report a bug?</strong> Use the contact email on the Support &amp; About page.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer (layout) -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-links">
+                <a href="terms.html">Terms of Service</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="support.html">Support &amp; About</a>
+            </div>
+            <div class="footer-copy">© sysCoreKit</div>
+        </div>
+    </footer>
+
+    <script>
+    (function(){
+      const SEARCH_INDEX = [
+        { title:"sysCoreKit", url:"index.html", snippet:"Overview of sysCoreKit add-ons." },
+        { title:"countW/Chinese", url:"countWithChinese.html", snippet:"Real-time bilingual word and character counting for Google Docs™." },
+        { title:"tabTOC", url:"tabTOC.html", snippet:"Cross-tab Table of Contents for Google Docs™." },
+        { title:"Terms of Service", url:"terms.html", snippet:"Non-commercial use, restrictions, and disclaimers." },
+        { title:"Privacy Policy", url:"privacy.html", snippet:"No data storage, no transmission, no third-party sharing." },
+        { title:"Support & About", url:"support.html", snippet:"Contact syscorekit@gmail.com and project info." }
+      ];
+
+      const wrap = document.getElementById("topSearch");
+      const openBtn = document.getElementById("searchOpen");
+      const closeBtn = document.getElementById("searchClose");
+      const input = document.getElementById("searchInput");
+      const results = document.getElementById("searchResults");
+
+      if(!wrap || !openBtn || !closeBtn || !input || !results) return;
+
+      function norm(s){ return (s || "").toLowerCase().trim(); }
+      function esc(s){
+        return String(s).replace(/[&<>"']/g, m => ({
+          "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+        }[m]));
+      }
+
+      function render(q){
+        const nq = norm(q);
+
+        // Requirement: show nothing when query is empty
+        if(!nq){
+          results.classList.remove("open");
+          results.innerHTML = "";
+          return;
+        }
+
+        const matches = SEARCH_INDEX
+          .map(it => {
+            const hay = norm(it.title + " " + it.snippet + " " + it.url);
+            return { it, ok: hay.includes(nq) };
+          })
+          .filter(x => x.ok)
+          .map(x => x.it);
+
+        // Also show nothing when there are no matches
+        if(!matches.length){
+          results.classList.remove("open");
+          results.innerHTML = "";
+          return;
+        }
+
+        results.classList.add("open");
+        results.innerHTML =
+          '<div class="top-search-results-inner">' +
+            matches.slice(0, 8).map(it =>
+              '<a class="top-search-item" href="' + esc(it.url) + '">' +
+                '<div class="t">' + esc(it.title) + '</div>' +
+                '<div class="s">' + esc(it.snippet) + '</div>' +
+              '</a>'
+            ).join("") +
+          '</div>';
+      }
+
+      function openSearch(){
+        wrap.classList.add("open");
+        wrap.querySelector(".top-search-field").setAttribute("aria-hidden", "false");
+        input.value = "";
+        render("");
+        setTimeout(() => input.focus(), 0);
+      }
+
+      function closeSearch(){
+        wrap.classList.remove("open");
+        wrap.querySelector(".top-search-field").setAttribute("aria-hidden", "true");
+        input.value = "";
+        render("");
+      }
+
+      openBtn.addEventListener("click", () => {
+        if(wrap.classList.contains("open")) input.focus();
+        else openSearch();
+      });
+
+      closeBtn.addEventListener("click", closeSearch);
+      input.addEventListener("input", e => render(e.target.value));
+
+      // click outside closes
+      document.addEventListener("click", (e) => {
+        if(!wrap.classList.contains("open")) return;
+        const clickedInside = wrap.contains(e.target) || results.contains(e.target);
+        if(!clickedInside) closeSearch();
+      });
+
+      // Esc closes, "/" opens
+      document.addEventListener("keydown", (e) => {
+        const isOpen = wrap.classList.contains("open");
+
+        if(e.key === "Escape" && isOpen){
+          e.preventDefault();
+          closeSearch();
+          return;
+        }
+
+        if(e.key === "/" && !isOpen){
+          const tag = (document.activeElement && document.activeElement.tagName) || "";
+          const typing = tag === "INPUT" || tag === "TEXTAREA" || (document.activeElement && document.activeElement.isContentEditable);
+          if(!typing){
+            e.preventDefault();
+            openSearch();
+          }
+        }
+      });
+    })();
+    </script>
+</body>
+</html>

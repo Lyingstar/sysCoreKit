@@ -1,31 +1,41 @@
-Solid State by HTML5 UP
-html5up.net | @ajlkn
-Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+# sysCoreKit
 
+**sysCoreKit** serves as my (Github ID: LyingStar) personal website for briefly demonstrate my work, experiments, and independent projects
 
-After a somewhat extended break from HTML5 UP (to work on a secret-ish new project --
-more on that later!) I'm back with a brand new design: Solid State, a slick new multi-
-pager that combines some of the ideas I've played with over at Pixelarity with an "angular"
-sort of look. Hope you dig it :)
+The website is intended for presentation and reference purposes only.  
+It is not a commercial product, service, or platform, and no guarantees are made regarding completeness, accuracy, or availability.
 
-Demo images* courtesy of Unsplash, a radtastic collection of CC0 (public domain) images
-you can use for pretty much whatever.
+## Purpose
 
-(* = not included)
+- Showcase selected personal work and technical explorations  
+- Provide a lightweight public-facing demonstration  
+- Serve as a hosting target (via GitHub Pages)
 
-AJ
-aj@lkn.io | @ajlkn
+## Usage Notice
 
+Access to this website is permitted for viewing only.
 
-Credits:
+**Hosting, mirroring, copying, or redistributing the same content of this website¡ªwhether in whole or in part¡ªis strictly forbidden**, including but not limited to:
+- Republishing the site or its content on another website or platform  
+- Cloning the content for public or private hosting  
+- Using the content as part of another project, product, or service  
 
-	Demo Images:
-		Unsplash (unsplash.com)
+No rights are granted beyond passive viewing.
 
-	Icons:
-		Font Awesome (fontawesome.io)
+## Terms of Use and Privacy
 
-	Other:
-		jQuery (jquery.com)
-		Scrollex (github.com/ajlkn/jquery.scrollex)
-		Responsive Tools (github.com/ajlkn/responsive-tools)
+Use of this website is subject to specific **Terms of Use** and **Privacy Policy**, which are publicly available on the website itself.
+
+These terms govern all access and usage.  
+No additional permissions or licenses are granted through this repository.
+
+## Privacy
+
+This website does not require user accounts and does not intentionally collect personal information beyond what is inherently provided through standard web hosting and browser access.
+
+Please refer to the published Privacy Policy on the website for details.
+
+## License
+
+Unless explicitly stated otherwise on the website, all content is protected and provided for personal demonstration purposes only.  
+Unauthorized reuse, redistribution, mirroring, or commercial use is prohibited.
