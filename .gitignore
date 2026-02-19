@@ -1,0 +1,17 @@
+# Ignore build/output folders
+dist/
+build/
+out/
+
+# Ignore cache or tooling folders
+.cache/
+.tmp/
+
+# Editor / IDE
+.vs/
+.vscode/
+*.vsidx
+
+# OS junk
+.DS_Store
+Thumbs.db
