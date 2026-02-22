@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="assets/images/sysCoreKit_32.ico" type="image/x-icon">
     <title>sysCoreKit</title>
     <meta name="description" content="sysCoreKit — a small toolkit of Google Workspace add-ons and utilities." />
 
@@ -22,9 +23,6 @@
             box-sizing: border-box;
         }
 
-        html, body {
-            height: 100%;
-        }
 
         body {
             margin: 0;
@@ -73,9 +71,8 @@
             width: 34px;
             height: 34px;
             border-radius: 10px;
-            border: 1px solid rgba(255,255,255,.18);
-            background: radial-gradient(10px 10px at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,0) 60%), linear-gradient(135deg, rgba(130,190,255,.30), rgba(110,255,215,.18));
-            box-shadow: 0 10px 30px rgba(0,0,0,.35);
+            display: block;
+            object-fit: contain;
         }
 
         .nav-right {
@@ -223,6 +220,57 @@
             }
         }
 
+        /* ---------- Footer ---------- */
+        .site-footer {
+            margin-top: 80px;
+            padding: 48px 0 56px;
+            border-top: 1px solid rgba(255,255,255,.10);
+            background: linear-gradient(to bottom, rgba(6,9,12,.6), rgba(6,9,12,.9));
+        }
+
+        .footer-inner {
+            width: min(var(--maxw), calc(100% - 40px));
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+            .footer-links a {
+                color: rgba(233,238,242,.75);
+                text-decoration: none;
+                font-size: 14px;
+            }
+
+                .footer-links a:hover {
+                    color: rgba(233,238,242,1);
+                    text-decoration: underline;
+                }
+
+        .footer-copy {
+            font-size: 13px;
+            color: rgba(233,238,242,.55);
+        }
+
+        .work-title-link {
+            color: #8fc6ff;
+            text-decoration: none;
+        }
+
+            .work-title-link:hover {
+                text-decoration: underline;
+            }
+
+
+
+
+
         /* ---------- Hero ---------- */
         .hero {
             position: relative;
@@ -280,7 +328,7 @@
         }
 
         /* White info panel */
-        .below-panel {
+        .panel-content {
             position: relative;
             z-index: 3;
             width: min(var(--maxw), calc(100% - 40px));
@@ -293,13 +341,13 @@
             overflow: hidden;
         }
 
-        .below-panel__inner {
+        .panel-content__inner {
             padding: 26px 26px;
             font-size: 18px;
             line-height: 1.7;
         }
 
-            .below-panel__inner strong {
+            .panel-content__inner strong {
                 font-weight: 650;
             }
 
@@ -404,53 +452,6 @@
                 min-height: 240px;
             }
         }
-
-        /* ---------- Footer ---------- */
-        .site-footer {
-            margin-top: 80px;
-            padding: 48px 0 56px;
-            border-top: 1px solid rgba(255,255,255,.10);
-            background: linear-gradient(to bottom, rgba(6,9,12,.6), rgba(6,9,12,.9));
-        }
-
-        .footer-inner {
-            width: min(var(--maxw), calc(100% - 40px));
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 22px;
-            flex-wrap: wrap;
-            margin-bottom: 18px;
-        }
-
-            .footer-links a {
-                color: rgba(233,238,242,.75);
-                text-decoration: none;
-                font-size: 14px;
-            }
-
-                .footer-links a:hover {
-                    color: rgba(233,238,242,1);
-                    text-decoration: underline;
-                }
-
-        .footer-copy {
-            font-size: 13px;
-            color: rgba(233,238,242,.55);
-        }
-
-        .work-title-link {
-            color: #8fc6ff;
-            text-decoration: none;
-        }
-
-            .work-title-link:hover {
-                text-decoration: underline;
-            }
     </style>
 </head>
 
@@ -458,7 +459,7 @@
     <header class="topbar">
         <div class="topbar__inner">
             <a class="brand" href="index" aria-label="sysCoreKit home">
-                <span class="brand__mark" aria-hidden="true"></span>
+                <img class="brand__mark" src="assets/images/sysCoreKit_32.ico" alt="" aria-hidden="true">
                 <span>sysCoreKit</span>
             </a>
 
@@ -501,8 +502,8 @@
         </div>
     </section>
 
-    <section class="below-panel" aria-label="Announcement">
-        <div class="below-panel__inner">
+    <section class="panel-content" aria-label="Announcement">
+        <div class="panel-content__inner">
             <strong>All add-ons listed on this website are available in the Google Workspace Marketplace</strong>
         </div>
     </section>
@@ -716,7 +717,7 @@
             });
         })();
 
-        
+
     </script>
 </body>
 </html>

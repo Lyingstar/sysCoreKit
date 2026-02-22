@@ -3,80 +3,131 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Privacy Policy | sysCoreKit</title>
-    <meta name="description" content="Privacy Policy for sysCoreKit website." />
+    <link rel="icon" href="assets/images/sysCoreKit_32.ico" type="image/x-icon">
+    <title>sysCoreKit</title>
+    <meta name="description" content="sysCoreKit — a small toolkit of Google Workspace add-ons and utilities." />
 
     <style>
         :root {
             --bg: #0b1116;
-            --panel: rgba(255,255,255,.96);
-            --text-dark: #0b1116;
-            --text-muted: #4a5560;
+            --text: #e9eef2;
+            --muted: rgba(233,238,242,.8);
+            --border: rgba(255,255,255,.14);
+            --shadow: 0 20px 60px rgba(0,0,0,.45);
             --radius: 18px;
-            --shadow: 0 20px 60px rgba(0,0,0,.35);
+            --nav-h: 66px;
+            --maxw: 1120px;
             --nav-w: 240px;
             --ghost-w: 240px;
-            --content-w: 760px;
-            --gap: 32px;
+            --content-w: 900px;
+            --gap: 10px;
             --top-offset: 120px;
         }
 
         * {
-            box-sizing: border-box
+            box-sizing: border-box;
         }
+
+        html, body {
+            height: 100%;
+        }
+
 
         body {
             margin: 0;
-            font-family: ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-            background: linear-gradient(180deg,#0b1116,#0e151b);
-            color: var(--text-dark);
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        header {
-            padding: 28px 0;
-            text-align: center
+        /* ---------- Top bar ---------- */
+        .topbar {
+            position: relative;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-h);
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            z-index: 50;
+            background: linear-gradient(to bottom, rgba(6,9,12,.75), rgba(6,9,12,.30));
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255,255,255,.08);
         }
 
-            header a {
-                color: #e9eef2;
+        .topbar__inner {
+            width: min(var(--maxw), calc(100% - 40px));
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            letter-spacing: .2px;
+            white-space: nowrap;
+        }
+
+        .brand__mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: block;
+            object-fit: contain;
+        }
+
+        /* ---------- Footer ---------- */
+        .site-footer {
+            margin-top: auto;
+            padding: 48px 0 56px;
+            border-top: 1px solid rgba(255,255,255,.10);
+            background: linear-gradient(to bottom, rgba(6,9,12,.6), rgba(6,9,12,.9));
+        }
+
+        .footer-inner {
+            width: min(var(--maxw), calc(100% - 40px));
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+            .footer-links a {
+                color: rgba(233,238,242,.75);
                 text-decoration: none;
-                font-weight: 600;
-                letter-spacing: .2px
+                font-size: 14px;
             }
 
-        h1 {
-            margin: 0 0 6px;
-            font-weight: 600;
-            font-size: 28px;
-            letter-spacing: .2px
+                .footer-links a:hover {
+                    color: rgba(233,238,242,1);
+                    text-decoration: underline;
+                }
+
+        .footer-copy {
+            font-size: 13px;
+            color: rgba(233,238,242,.55);
         }
 
-        .updated {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin-bottom: 24px
-        }
 
-        h2 {
-            font-size: 18px;
-            margin: 28px 0 8px
-        }
-
-        ul {
-            padding-left: 20px;
-            margin: 8px 0 0
-        }
-
-        li {
-            margin: 6px 0
-        }
-
-        footer {
-            text-align: center;
-            font-size: 14px;
-            color: #aab3bd;
-            margin: 0 0 40px
-        }
+        /*panels*/
 
         .panel-layout {
             margin: 0 auto 80px;
@@ -89,7 +140,8 @@
         }
 
         .panel-nav {
-            background: var(--panel);
+            background: white;
+            color: black;
             border-radius: var(--radius); /*round corner*/
             box-shadow: var(--shadow);
             padding: 10px 20px;
@@ -101,17 +153,19 @@
             align-self: start;
         }
 
+
+
         .panel-middle {
             display: flex;
             flex-direction: column;
-            gap: 48px;
         }
 
         .panel-content {
-            background: var(--panel);
+            background: white;
+            color: black;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: 36px 32px;
+            padding: 0px 20px;
             line-height: 1.7;
             width: 100%;
             margin: 0;
@@ -121,43 +175,42 @@
                 margin-top: 20px;
             }
 
-        @media (max-width:1180px) {
-            :root {
-                --nav-w: 200px;
-                --ghost-w: 0px;
-                --gap: 24px
+        @media (max-width:1200px) { /*stack all columns vertically when width < ?px*/
+
+            .panel-layout {
+                grid-template-columns: var(--nav-w) minmax(0,1fr);
+                max-width: calc(var(--nav-w) + var(--gap) + 100%);
             }
 
             .panel-ghost {
-                display: none
+                display: none;
             }
         }
 
-        @media (max-width:960px) {
+        @media (max-width:960px) { /*stack all columns vertically when width < ?px*/
             .panel-layout {
                 grid-template-columns: 1fr;
-                max-width: none
             }
 
             .panel-nav {
                 position: static
-            }
-
-            .panel-ghost {
-                display: none
-            }
-
-            .panel-content {
-                padding: 28px 22px
             }
         }
     </style>
 </head>
 
 <body>
-    <header>
-        <a href="index">sysCoreKit</a>
+    <header class="topbar">
+        <div class="topbar__inner">
+            <a class="brand" href="index" aria-label="sysCoreKit home">
+                <img class="brand__mark" src="assets/images/sysCoreKit_32.ico" alt="" aria-hidden="true">
+                <span>sysCoreKit</span>
+            </a>
+        </div>
     </header>
+
+
+
 
 
     <div class="panel-layout">
@@ -171,7 +224,7 @@
             </nav>
         </aside>
 
-        <main calss="panel-middle">
+        <main class="panel-middle">
             <!--sysCoreKit website privacy policy-->
             <div id="web" class="panel-content">
                 <h1>sysCoreKit Website Privacy Policy</h1>
@@ -478,8 +531,17 @@
     </div>
 
 
-    <footer>
-        © sysCoreKit
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-links">
+                <a href="terms">Terms of Service</a>
+                <a href="privacy">Privacy Policy</a>
+                <a href="support">Support &amp; About</a>
+            </div>
+            <div class="footer-copy">© sysCoreKit</div>
+        </div>
     </footer>
+
 </body>
 </html>
